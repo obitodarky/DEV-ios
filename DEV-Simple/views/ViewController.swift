@@ -12,12 +12,6 @@ import UserNotifications
 import PushNotifications
 import NotificationBanner
 
-extension Notification.Name {
-    static let didReceiveData = Notification.Name("didReceiveData")
-    static let didCompleteTask = Notification.Name("didCompleteTask")
-    static let completedLengthyDownload = Notification.Name("completedLengthyDownload")
-}
-
 struct UserData: Codable {
     enum CodingKeys: String, CodingKey {
         case userID = "id"
@@ -149,6 +143,10 @@ class ViewController: UIViewController {
         }
     }
 
+    @IBAction func refreshButtonTapped(_ sender: Any) {
+        webView.reload()
+    }
+
     @IBAction func safariButtonTapped(_ sender: Any) {
         openInBrowser()
     }
@@ -226,11 +224,6 @@ class ViewController: UIViewController {
     }
 
     private func applyDarkTheme() {
-        guard let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else {
-            return
-        }
-
-        statusBarView.backgroundColor = darkBackgroundColor
         useDarkMode = true
         setNeedsStatusBarAppearanceUpdate()
         navigationToolBar.isTranslucent = false
@@ -395,15 +388,6 @@ extension ViewController: WKScriptMessageHandler {
                 let notification = UINotificationFeedbackGenerator()
                 notification.notificationOccurred(.success)
             }
-        }
-    }
-}
-
-extension WKWebView {
-    func load(_ urlString: String) {
-        if let url = URL(string: urlString) {
-            let request = URLRequest(url: url)
-            load(request)
         }
     }
 }
